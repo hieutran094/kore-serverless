@@ -1,0 +1,12 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "[j|t]s",
+    "ignore": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "node_modules"
+    ],
+    "exec": "ts-node-dev ./src/local.ts"
+}
