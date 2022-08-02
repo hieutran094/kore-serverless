@@ -4,6 +4,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import * as path from 'path'
 import getToken from './utils/jwtGenerate'
+import { Body } from './interfaces/jwtBody'
 
 dotenv.config()
 
@@ -16,7 +17,7 @@ app.use(cors())
 
 app.use('/', express.static(path.join(PROJECT_DIR, '')))
 app.post('/token', async (req: Request, res: Response) => {
-    const data = {
+    const data: Body = {
         sub: req.body.identity,
         iss: req.body.clientId,
         algorithm: 'HS256'
