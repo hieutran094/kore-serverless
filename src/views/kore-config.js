@@ -14,8 +14,8 @@
         'https://6nqbxfmn35.execute-api.ap-southeast-1.amazonaws.com/prod/token'
     botOptions.userIdentity = uuidv4() // Provide users email id here
     botOptions.botInfo = {
-        name: 'Banking Bot',
-        _id: 'st-cf6fc702-e6c5-50e2-920c-a780958afc78'
+        name: 'Travel Bot',
+        _id: 'st-9dff1dc3-25f1-59ad-a4e9-4ee1722ce452'
     } // bot name is case sensitive
 
     /* 
@@ -23,7 +23,7 @@
     Refer below document for JWT token generation at server side. Client Id and Client secret should maintained at server end.
     https://developer.kore.ai/docs/bots/sdks/user-authorization-and-assertion/
     **/
-    botOptions.clientId = 'cs-05f359e2-b876-57bb-9738-86ef88e43653'
+    botOptions.clientId = 'cs-5697e30e-48cc-55f0-b518-e6b8c692ce12'
     botOptions.brandingAPIUrl =
         botOptions.koreAPIUrl +
         'websdkthemes/' +
