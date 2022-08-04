@@ -1,5 +1,11 @@
+/**
+ * this config using for copy static folder to build
+ * use when deploy only to lambda
+ */
+
 const path = require('path')
 const AwsSamPlugin = require('aws-sam-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const awsSamPlugin = new AwsSamPlugin()
 
@@ -19,5 +25,10 @@ module.exports = {
     module: {
         rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
     },
-    plugins: [awsSamPlugin]
+    plugins: [
+        awsSamPlugin,
+        new CopyPlugin({
+            patterns: [{ from: 'src/views', to: '.aws-sam/build/ExpressFunction/views' }]
+        })
+    ]
 }
