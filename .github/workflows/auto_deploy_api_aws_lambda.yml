@@ -1,7 +1,9 @@
-name: Auto deploy to AWS Lambda
+name: Auto deploy API to AWS Lambda
 
 on:
     push:
+        paths-ignore:
+            - 'src/views/**'
         branches:
             - master
 jobs:
