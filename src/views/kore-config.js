@@ -14,7 +14,7 @@
         'https://6nqbxfmn35.execute-api.ap-southeast-1.amazonaws.com/prod/token'
     botOptions.userIdentity = uuidv4() // Provide users email id here
     botOptions.botInfo = {
-        name: 'Travel Bot',
+        name: 'Travel Assistant',
         _id: 'st-9dff1dc3-25f1-59ad-a4e9-4ee1722ce452'
     } // bot name is case sensitive
 
