@@ -3,44 +3,62 @@ Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM Boilerplate Using TypeScript
 
 Globals:
-  Function:
-    Runtime: nodejs14.x
-    Timeout: 30
+    Function:
+        Runtime: nodejs14.x
+        Timeout: 30
+Parameters:
+    BookingTableName:
+        Type: String
+        Description: The DynamoDB table for storing Person information.
+        Default: 'booking_detail'
 
 Resources:
-  ExpressApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-      BinaryMediaTypes: ['*/*']
+    BookingDetailTable:
+        Type: AWS::DynamoDB::Table
+        Properties:
+            TableName: !Ref BookingTableName
+            AttributeDefinitions:
+                - AttributeName: id
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: id
+                  KeyType: HASH
+            ProvisionedThroughput:
+                ReadCapacityUnits: 1
+                WriteCapacityUnits: 1
 
-  ExpressFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: lambda.handler
-      FunctionName: 'ExpressFunction'
-      CodeUri: src/
-      Events:
-        ExpressFunctionProxy:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ExpressApi
-            Path: "/{proxy+}"
-            Method: ANY
-        ExpressFunctionRoot:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ExpressApi
-            Path: "/"
-            Method: ANY
+    ExpressApi:
+        Type: AWS::Serverless::Api
+        Properties:
+            StageName: prod
+            BinaryMediaTypes: ['*/*']
+
+    ExpressFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: lambda.handler
+            FunctionName: 'ExpressFunction'
+            CodeUri: src/
+            Events:
+                ExpressFunctionProxy:
+                    Type: Api
+                    Properties:
+                        RestApiId: !Ref ExpressApi
+                        Path: '/{proxy+}'
+                        Method: ANY
+                ExpressFunctionRoot:
+                    Type: Api
+                    Properties:
+                        RestApiId: !Ref ExpressApi
+                        Path: '/'
+                        Method: ANY
 Outputs:
-
-  ExpressFunctiondApi:
-    Description: "API Gateway endpoint URL for Prod stage for Express function"
-    Value: !Sub "https://${ExpressApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
-  ExpressFunction:
-    Description: "Express Lambda Function ARN"
-    Value: !GetAtt ExpressFunction.Arn
-  ExpressFunctionIamRole:
-    Description: "Implicit IAM Role created for Express function"
-    Value: !GetAtt ExpressFunctionRole.Arn
+    ExpressFunctiondApi:
+        Description: 'API Gateway endpoint URL for Prod stage for Express function'
+        Value: !Sub 'https://${ExpressApi}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+    ExpressFunction:
+        Description: 'Express Lambda Function ARN'
+        Value: !GetAtt ExpressFunction.Arn
+    ExpressFunctionIamRole:
+        Description: 'Implicit IAM Role created for Express function'
+        Value: !GetAtt ExpressFunctionRole.Arn
