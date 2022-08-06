@@ -6,7 +6,8 @@
     "ignore": [
         "**/*.test.ts",
         "**/*.spec.ts",
-        "node_modules"
+        "node_modules",
+        "src/views/*"
     ],
-    "exec": "ts-node-dev ./src/local.ts"
+    "exec": "yarn develop"
 }

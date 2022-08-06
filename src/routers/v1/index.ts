@@ -1,9 +1,9 @@
-import express, { Express } from 'express'
-import BookingDetailRouter from './bookingDetail.router'
+import { Router } from 'express'
+import bookingDetailRouter from './bookingDetail.router'
+import authRouter from './auth.router'
 
-export default (app: Express) => {
-    const routers = express.Router()
-    routers.use(BookingDetailRouter)
-    app.use('/api/v1/', routers)
-    return app
-}
+const routers = Router()
+routers.use('/api/v1/', bookingDetailRouter)
+routers.use('/api/v1/', authRouter)
+
+export default routers

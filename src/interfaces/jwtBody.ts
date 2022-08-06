@@ -1,5 +1,5 @@
 export interface Body {
-    sub: string
-    iss: string
+    sub: string | null
+    iss: string | null
     algorithm: string
 }

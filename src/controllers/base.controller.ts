@@ -8,12 +8,15 @@ export default class BaseController<T> {
         try {
             const id = req.params.id
             const data = await this.service.getOne(id)
-            res.status(200).send({
-                code: 200,
-                success: true,
-                data,
-                message: ''
-            })
+            this.toJsonResponse(res, 200, data)
+        } catch (err) {
+            next(err)
+        }
+    }
+    async getMany(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await this.service.getMany()
+            this.toJsonResponse(res, 200, data)
         } catch (err) {
             next(err)
         }
@@ -22,12 +25,7 @@ export default class BaseController<T> {
         try {
             const body = req.body
             const data = await this.service.createOne(body)
-            res.status(200).send({
-                code: 201,
-                success: true,
-                data,
-                message: 'Created'
-            })
+            this.toJsonResponse(res, 201, data, 'Create successfully')
         } catch (err) {
             next(err)
         }
@@ -37,14 +35,28 @@ export default class BaseController<T> {
             const id = req.params.id
             const body = req.body
             const data = await this.service.updateOne(id, body)
-            res.status(200).send({
-                code: 200,
-                success: true,
-                data,
-                message: 'Updated'
-            })
+            this.toJsonResponse(res, 200, data, 'Update successfully')
         } catch (err) {
             next(err)
         }
+    }
+
+    async deleteOne(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id
+            await this.service.deleteOne(id)
+            this.toJsonResponse(res, 200, null, 'Delete successfully')
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    protected toJsonResponse(
+        res: Response,
+        code: number,
+        data: T | T[] | null,
+        message: string = ''
+    ) {
+        res.status(code).send({ code, success: true, data, message })
     }
 }

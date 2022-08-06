@@ -17,7 +17,7 @@ module.exports = {
     target: 'node',
     mode: process.env.NODE_ENV || 'development',
     module: {
-        rules: [{ test: /\.tsx?$/, loader: 'ts-loader' }]
+        rules: [{ test: /\.tsx?$/, loader: 'swc-loader' }]
     },
     plugins: [awsSamPlugin]
 }

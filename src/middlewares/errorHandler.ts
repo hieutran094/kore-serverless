@@ -10,6 +10,7 @@ export default (
         return next(err)
     }
     res.status(err.statusCode || 500).send({
+        code: err.statusCode || 500,
         success: false,
         message: err.message || 'Internal Server Error'
     })

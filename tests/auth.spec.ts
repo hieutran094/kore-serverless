@@ -12,9 +12,10 @@ describe('/token', () => {
             CLIENT_SECRET: secretKey
         })
         const res = await request(app)
-            .post('/token')
+            .post('/api/v1/token')
             .send({ sub: 'sub', iss: 'clientId' })
         const isValidToken = await jwt.verify(res.body.jwt, secretKey)
         expect(isValidToken).toBeTruthy()
     })
 })
+

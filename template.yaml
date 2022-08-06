@@ -9,7 +9,7 @@ Globals:
 Parameters:
     BookingTableName:
         Type: String
-        Description: The DynamoDB table for storing Person information.
+        Description: The DynamoDB table for storing booking information.
         Default: 'booking_detail'
 
 Resources:

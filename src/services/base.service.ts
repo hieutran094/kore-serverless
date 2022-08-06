@@ -1,4 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { AWSError } from 'aws-sdk'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import ResponseError from '../utils/responseError'
@@ -9,6 +10,7 @@ export default class BaseService<T> {
     async getOne(id: string): Promise<T> {
         const params = { TableName: this.tableName, Key: { id } }
         const data = await this.db.get(params).promise()
+
         if (!data.Item) {
             throw new ResponseError({
                 statusCode: 404,
@@ -31,13 +33,15 @@ export default class BaseService<T> {
     }
 
     async createOne(dto: T): Promise<T> {
+        const now = moment().utc().toISOString()
         const params = {
             TableName: this.tableName,
             ConditionExpression: 'attribute_not_exists(id)',
             Item: {
                 ...dto,
                 id: uuidv4(),
-                createdAt: moment().utc().toISOString()
+                createdAt: now,
+                updatedAt: now
             }
         }
         await this.db.put(params).promise()
@@ -56,7 +60,7 @@ export default class BaseService<T> {
                 .promise()
             return dto as T
         } catch (err) {
-            if ((err as any).code === 'ConditionalCheckFailedException') {
+            if ((err as AWSError).code === 'ConditionalCheckFailedException') {
                 throw new ResponseError({
                     statusCode: 404,
                     message: `An item could not be found with id: ${id}`
@@ -66,12 +70,20 @@ export default class BaseService<T> {
         }
     }
 
-    protected generateUpdateQuery(fields: T) {
-        let exp: any = {
+    async deleteOne(id: string): Promise<void> {
+        await this.db
+            .delete({ TableName: this.tableName, Key: { id } })
+            .promise()
+    }
+
+    protected generateUpdateQuery(dto: T) {
+        const now = moment().utc().toISOString()
+        const exp: any = {
             UpdateExpression: 'set',
             ExpressionAttributeNames: {},
             ExpressionAttributeValues: {}
         }
+        const fields = { ...dto, updatedAt: now }
         Object.entries(fields).forEach(([key, item]) => {
             exp.UpdateExpression += ` #${key} = :${key},`
             exp.ExpressionAttributeNames[`#${key}`] = key
