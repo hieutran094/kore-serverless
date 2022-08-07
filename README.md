@@ -1,4 +1,4 @@
-# KoreAi + Typescript + Lambda
+# Base CRUD Typescript + Lambda + DynamoDb + KoreAi
 
 ## Install packages
 
