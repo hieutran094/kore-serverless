@@ -9,6 +9,10 @@ router
     .post(bookingDetailController.createOne.bind(bookingDetailController))
 
 router
+    .route('/booking/:id/soft-delete')
+    .delete(bookingDetailController.softDeleteOne.bind(bookingDetailController))
+
+router
     .route('/booking/:id')
     .get(bookingDetailController.getOne.bind(bookingDetailController))
     .put(bookingDetailController.updateOne.bind(bookingDetailController))

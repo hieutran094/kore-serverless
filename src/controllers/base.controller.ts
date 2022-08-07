@@ -45,6 +45,16 @@ export default class BaseController<T> {
         try {
             const id = req.params.id
             await this.service.deleteOne(id)
+            this.toJsonResponse(res, 200, null, 'Permanently delete successfully')
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async softDeleteOne(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id
+            await this.service.softDeleteOne(id)
             this.toJsonResponse(res, 200, null, 'Delete successfully')
         } catch (err) {
             next(err)
