@@ -39,6 +39,13 @@ Resources:
             Handler: lambda.handler
             FunctionName: 'ExpressFunction'
             CodeUri: src/
+            Description: Base CRUD express + DynamoDB
+            MemorySize: 128
+            Timeout: 120
+            Policies:
+                - AWSLambdaExecute
+                - DynamoDBCrudPolicy:
+                      TableName: !Ref BookingTableName
             Events:
                 ExpressFunctionProxy:
                     Type: Api
