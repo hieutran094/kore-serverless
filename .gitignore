@@ -3,6 +3,8 @@ node_modules
 dist
 build
 .aws-sam
+.serverless
+.webpack
 
 
 # local env files
