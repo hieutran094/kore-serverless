@@ -17,13 +17,24 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: 16
-                  cache: 'yarn'
 
-            - name: Serverless deploy
-              uses: serverless/github-action@v3.1
+            - name: Install Serverless Framework
+              run: yarn global add serverless
+
+            - name: Serverless AWS authentication
+              run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+            - uses: actions/cache@v2
+              id: yarn-cache
               with:
-                  args: -c "serverless plugin install --name serverless-dotenv-plugin serverless-bundle serverless-offline && serverless deploy"
+                  path: '**/node_modules'
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Install Dependencies
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
+              run: yarn install --frozen-lockfile
+
+            - name: Deploy
+              run: yarn deploy:prod
               env:
                   PORT: 8080
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
