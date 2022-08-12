@@ -5,7 +5,7 @@ custom:
         linting: false
         excludeFiles: '**/*.spec.ts'
     serverless-offline:
-        httpPort: ${env:PORT}
+        httpPort: ${env:PORT, 8080}
         noPrependStageInUrl: true
 
 provider:
