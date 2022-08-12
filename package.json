@@ -4,13 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf .aws-sam",
     "develop": "node -r @swc-node/register ./src/local.ts",
     "dev": "nodemon -L",
     "dev:sls": "cross-env NODE_ENV=development sls offline start --stage offline",
     "deploy:prod": "cross-env NODE_ENV=production sls deploy --stage prod",
-    "build": "webpack-cli",
-    "watch": "webpack-cli -w",
     "test": "jest",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint --fix \"{src,apps,libs,test}/**/*.ts\"",
