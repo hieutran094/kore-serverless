@@ -11,7 +11,7 @@
     botOptions.recorderWorkerPath = '../libs/recorderWorker.js'
 
     botOptions.JWTUrl =
-        'https://6nqbxfmn35.execute-api.ap-southeast-1.amazonaws.com/prod/token'
+        'http://localhost:8080/api/v1/token'
     botOptions.userIdentity = uuidv4() // Provide users email id here
     botOptions.botInfo = {
         name: 'Travel Assistant',
@@ -44,9 +44,17 @@
     //     hostname: 'HOSTNAME_TO_BE_REWRITTEN',
     //     port: 'PORT_TO_BE_REWRITTEN'
     // };
+    
+    /** algolia search */
+    var algoliaConfig = {
+        applicationID: 'ZSH2P5ZPSS',
+        searchAPIKey:'5b7324fd0a876e4bbba6e0885f70dea5',
+        index : 'kore.lambda'
+    }
 
     var chatConfig = {
         botOptions: botOptions,
+        algoliaConfig,
         allowIframe: false, // set true, opens authentication links in popup window, default value is "false"
         isSendButton: false, // set true, to show send button below the compose bar
         isTTSEnabled: false, // set true, to hide speaker icon

@@ -34,6 +34,9 @@
             var detectScriptTag = /<script\b[^>]*>([\s\S]*?)/gm;
             var _eventQueue = {};
             var carouselEles = [];
+
+            var isInputAutocomplete = false;
+            var algoliaSearch = null;
             var prevRange, accessToken, koreAPIUrl, fileToken, fileUploaderCounter = 0, bearerToken = '', assertionToken = '', messagesQueue = [], historyLoading = false;
             var speechServerUrl = '', userIdentity = '', isListening = false, isRecordingStarted = false, speechPrefixURL = "", sidToken = "", carouselTemplateCount = 0, waiting_for_message = false, loadHistory = false;
             var EVENTS={
@@ -1086,6 +1089,45 @@
                 }
                 return storage; 
             }
+            
+            /** algolia search */
+            chatWindow.prototype.initAlgolia = function () {
+                var me = this;
+                me.algoliaSearch = algoliasearch(me.config.algoliaConfig.applicationID, me.config.algoliaConfig.searchAPIKey);
+            }
+
+            chatWindow.prototype.destroyAlgolia = function () {
+                var me = this;
+                me.stopAlgoliaSearch();
+            }
+
+            chatWindow.prototype.stopAlgoliaSearch = function () {
+                var me = this;
+                if(me.isInputAutocomplete){
+                    me.isInputAutocomplete = false;
+                    $('.chatInputBox').autocomplete('destroy');
+                    $('.chatInputBox').removeClass('algoliaAutocomplete');
+                }
+            }
+
+            chatWindow.prototype.startAlgoliaSearch = function () {
+                var me = this;
+                me.isInputAutocomplete = true;
+                const searchIndex = me.algoliaSearch.initIndex(me.config.algoliaConfig.index)
+                $(".chatInputBox").addClass("algoliaAutocomplete");
+                $('.algoliaAutocomplete').autocomplete({
+                    source: function( request, response ) {
+                        searchIndex
+                        .search(request.term)
+                        .then(({ hits }) => {
+                            var availableSource = hits.map((item) => item.city)
+                            response( availableSource );
+                        })
+                    },
+                    position: {  collision: "flip"  }
+                });
+            }
+
             chatWindow.prototype.init = function () {
                 var me = this;
                 me.initi18n();
@@ -1115,6 +1157,10 @@
                 me.config.ttsInterface = me.config.ttsInterface || 'webapi';
                 me.loadHistory = me.config.loadHistory || false;
                 me.historyLoading = me.loadHistory ? true : false;
+                /** algolia search */
+                me.isInputAutocomplete = false;
+                me.initAlgolia();
+
                 me.config.botOptions.loadHistory = me.config.loadHistory;
                 me.config.botOptions.chatHistory=me.config.chatHistory;
                 me.config.botOptions.handleError=me.config.handleError;
@@ -1249,6 +1295,8 @@
                 var me = this;
                 $('.kore-chat-overlay').hide();
                 me.bot.close();
+                /** algolia search */
+                me.destroyAlgolia();
                 if (!me.config.minimizeMode) {
                     me.bot.destroy();
                 }
@@ -1387,6 +1435,11 @@
                         event.preventDefault();
 
                         me.sendMessage(_this, me.attachmentInfo);
+                   
+                        /** algolia search */
+                        if(me.isInputAutocomplete){
+                            me.stopAlgoliaSearch(); 
+                        }
                         return;
                     }
                     else if (event.keyCode === 27) {
@@ -2361,6 +2414,16 @@
                             'extension': extension,
                             'extractedFileName': _extractedFileName
                         });
+                    }
+                    else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "auto_complete_location") {
+                        messageHtml = $(me.getChatTemplate("message")).tmpl({
+                            'msgData': msgData,
+                            'helpers': helpers,
+                            'extension': extension
+                        });
+                        if(!me.historyLoading) {
+                            me.startAlgoliaSearch();
+                        }
                     }
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "table") {
                         messageHtml = $(me.getChatTemplate("tableChartTemplate")).tmpl({
