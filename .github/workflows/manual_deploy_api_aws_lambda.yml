@@ -31,6 +31,6 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Deploy
-              run: deploy:prod
+              run: yarn deploy:prod
               env:
                   PORT: 8080
