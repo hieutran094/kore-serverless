@@ -21,6 +21,14 @@ jobs:
             - name: Install firebase-tools
               run: yarn global add firebase-tools
 
+            - name: Run script file
+              env:
+                  API_URL: ${{ secrets.API_URL }}
+              run: |
+                  chmod +x ./script/entrypoint.sh
+                  ./script/entrypoint.sh
+              shell: bash
+
             - name: Run deploy
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
