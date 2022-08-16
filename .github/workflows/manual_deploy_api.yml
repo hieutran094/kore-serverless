@@ -30,6 +30,12 @@ jobs:
             - name: Build
               run: yarn build
 
+            - name: Create env production file
+              run: |
+                  touch .env
+                  echo CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
+                  cat .env
+
             - name: Run deploy
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

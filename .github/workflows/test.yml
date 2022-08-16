@@ -4,10 +4,10 @@ on:
     pull_request:
         types: [opened, synchronize]
         paths-ignore:
-            - 'src/views/**'
+            - 'public/**'
     push:
         paths-ignore:
-            - 'src/views/**'
+            - 'public/**'
         branches:
             - master
 
