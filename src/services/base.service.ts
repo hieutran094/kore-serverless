@@ -136,6 +136,6 @@ export default class BaseService<T> {
 
     protected async generateId(): Promise<string> {
         const data = await this.db.scan({ TableName: this.tableName }).promise()
-        return `ID${data.Count || 0 + 1}`
+        return `ID${(data.Items?.length || 0) + 1}`
     }
 }
