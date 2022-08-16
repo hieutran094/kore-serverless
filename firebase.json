@@ -4,24 +4,23 @@
         "indexes": "firestore.indexes.json"
     },
     "hosting": {
-        "public": "src/views",
+        "public": "public",
         "ignore": [
-            "firebase.json",
-            "**/.*",
             "**/node_modules/**",
+            "**/tests/**",
             "**/src/**",
-            "**/public/**",
+            "**/.*",
+            "**/.vscode/**",
+            "**/.github/**",
+            "README.md",
+            "package-lock.json",
+            "yarn.lock",
+            "firebase.json",
+            "nodemon.json",
+            "jest.config.js",
             ".env"
         ],
         "rewrites": [
-            {
-                "source": "/v1/**",
-                "function": "api"
-            },
-            {
-                "source": "/robots.txt",
-                "destination": "/robots.txt"
-            },
             {
                 "source": "**",
                 "destination": "/index.html"
@@ -45,7 +44,8 @@
             "yarn.lock",
             "firebase.json",
             "nodemon.json",
-            "jest.config.js"
+            "jest.config.js",
+            ".env"
         ]
     }
 }

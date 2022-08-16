@@ -44,10 +44,10 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Run test
-              run: firebase emulators:exec --only firestore --project kore-firebase-api "yarn test"
+              run: firebase emulators:exec --only firestore "yarn test"
               env:
                   FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-                  FIREBASE_PROJECT_ID: kore-firebase-api
+                  FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
                   #FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
                   #FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
                   #FIRESTORE_EMULATOR_HOST: localhost:8080

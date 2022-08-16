@@ -5,6 +5,7 @@ build
 .aws-sam
 .serverless
 .webpack
+.firebase
 
 
 # local env files

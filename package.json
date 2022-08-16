@@ -9,6 +9,8 @@
     "dev": "nodemon -L",
     "build": "swc ./src -d build",
     "build:watch": "swc ./src -d build -w",
+    "deploy:api": "firebase deploy --only functions",
+    "deploy:client": "firebase deploy --only hosting",
     "test": "jest",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint --fix \"{src,apps,libs,test}/**/*.ts\"",

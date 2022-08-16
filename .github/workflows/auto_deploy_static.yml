@@ -1,0 +1,28 @@
+name: Auto deploy static files
+
+on:
+    push:
+        paths:
+            - 'public/**'
+        branches:
+            - master
+jobs:
+    build-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out Git repository
+              uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 16
+
+            - name: Install firebase-tools
+              run: yarn global add firebase-tools
+
+            - name: Run deploy
+              env:
+                  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+                  FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+              run: yarn deploy:client
