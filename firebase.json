@@ -1,0 +1,51 @@
+{
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "hosting": {
+        "public": "public",
+        "ignore": [
+            "**/node_modules/**",
+            "**/tests/**",
+            "**/src/**",
+            "**/.*",
+            "**/.vscode/**",
+            "**/.github/**",
+            "README.md",
+            "package-lock.json",
+            "yarn.lock",
+            "firebase.json",
+            "nodemon.json",
+            "jest.config.js",
+            ".env"
+        ],
+        "rewrites": [
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
+    },
+    "functions": {
+        "runtime": "nodejs16",
+        "source": "./",
+        "predeploy": [],
+        "ignore": [
+            "**/node_modules/**",
+            "**/tests/**",
+            "**/src/**",
+            "**/public/**",
+            "**/.*",
+            "**/.vscode/**",
+            "**/.github/**",
+            "README.md",
+            "package-lock.json",
+            "yarn.lock",
+            "firebase.json",
+            "nodemon.json",
+            "jest.config.js",
+            ".env"
+        ]
+    }
+}
