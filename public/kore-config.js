@@ -10,8 +10,9 @@
     botOptions.koreAnonymousFn = koreAnonymousFn
     botOptions.recorderWorkerPath = '../libs/recorderWorker.js'
 
+    /**replace when ci/cd deploy */
     botOptions.JWTUrl =
-        'https://u9xwh0l47a.execute-api.ap-northeast-1.amazonaws.com/api/v1/token'
+        '$API_URL/api/v1/token'
     botOptions.userIdentity = uuidv4() // Provide users email id here
     botOptions.botInfo = {
         name: 'Travel Assistant',

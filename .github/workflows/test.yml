@@ -10,7 +10,6 @@ on:
             - 'src/views/**'
         branches:
             - master
-            - feature/firebase
 
 jobs:
     e2e-test:
