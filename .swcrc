@@ -1,0 +1,17 @@
+{
+    "exclude": "src/local.ts", 
+    "jsc": {
+        "parser": {
+            "syntax": "typescript"
+        },
+        "target": "es2021",
+        "baseUrl": "src",
+        "paths": {
+            "~/*": ["*"]
+        }
+    },
+    "module": {
+        "type": "commonjs"
+    },
+    "sourceMaps": false
+}
