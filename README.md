@@ -1,4 +1,4 @@
-# Base CRUD Typescript + Lambda + DynamoDb + KoreAi
+# Base CRUD Typescript + KoreAi + [Lambda + DynamoDb / Firebase+  Firestore] 
 
 ## Install packages
 
