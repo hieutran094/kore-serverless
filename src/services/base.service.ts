@@ -155,7 +155,8 @@ export default class BaseService<T> {
         Object.entries(fields).forEach(([key, item]) => {
             exp.UpdateExpression += ` #${key} = :${key},`
             exp.ExpressionAttributeNames[`#${key}`] = key
-            exp.ExpressionAttributeValues[`:${key}`] = item
+            exp.ExpressionAttributeValues[`:${key}`] =
+                key === 'deleteFlag' ? JSON.parse(item) : item
         })
         exp.UpdateExpression = exp.UpdateExpression.slice(0, -1)
         return exp
