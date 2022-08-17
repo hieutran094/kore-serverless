@@ -2415,13 +2415,14 @@
                             'extractedFileName': _extractedFileName
                         });
                     }
+                     /** algolia search */
                     else if (msgData.message[0] && msgData.message[0].component && msgData.message[0].component.payload && msgData.message[0].component.payload.template_type == "auto_complete_location") {
-                        messageHtml = $(me.getChatTemplate("message")).tmpl({
+                        messageHtml = $(me.getChatTemplate("templatebutton")).tmpl({
                             'msgData': msgData,
                             'helpers': helpers,
                             'extension': extension
                         });
-                        if(!me.historyLoading) {
+                        if(!msgData.fromHistory) {
                             me.startAlgoliaSearch();
                         }
                     }
