@@ -1,4 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { Request } from 'express'
 import { AWSError } from 'aws-sdk'
 // import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
@@ -28,6 +29,32 @@ export default class BaseService<T> {
             })
         }
         return data.Items?.[0] as T
+    }
+
+    async search(req: Request): Promise<T[]> {
+        const { phoneNumber } = req.query
+        const params = {
+            TableName: this.tableName,
+            FilterExpression:
+                '#deleteFlag = :deleteFlagValue and #phoneNumber = :phoneNumber',
+            ExpressionAttributeNames: {
+                '#deleteFlag': 'deleteFlag',
+                '#phoneNumber': 'phoneNumber'
+            },
+            ExpressionAttributeValues: {
+                ':deleteFlagValue': false,
+                ':phoneNumber': phoneNumber
+            }
+        }
+        const data = await this.db.scan(params).promise()
+
+        if (data.Items?.length === 0) {
+            throw new ResponseError({
+                statusCode: 404,
+                message: `An item could not be found`
+            })
+        }
+        return data.Items as T[]
     }
 
     async getMany(): Promise<T[]> {

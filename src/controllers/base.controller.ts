@@ -13,6 +13,16 @@ export default class BaseController<T> {
             next(err)
         }
     }
+
+    async search(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await this.service.search(req)
+            this.toJsonResponse(res, 200, data)
+        } catch (err) {
+            next(err)
+        }
+    }
+
     async getMany(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.service.getMany()
@@ -45,7 +55,12 @@ export default class BaseController<T> {
         try {
             const id = req.params.id
             await this.service.deleteOne(id)
-            this.toJsonResponse(res, 200, null, 'Permanently delete successfully')
+            this.toJsonResponse(
+                res,
+                200,
+                null,
+                'Permanently delete successfully'
+            )
         } catch (err) {
             next(err)
         }
