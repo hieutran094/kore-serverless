@@ -21,6 +21,15 @@ export default class BaseController<T> {
             next(err)
         }
     }
+    async search(req: Request, res: Response, next: NextFunction) {
+        try {
+            const data = await this.service.search(req)
+            this.toJsonResponse(res, 200, data)
+        } catch (err) {
+            next(err)
+        }
+    }
+
     async createOne(req: Request, res: Response, next: NextFunction) {
         try {
             const body = req.body
@@ -34,6 +43,10 @@ export default class BaseController<T> {
         try {
             const id = req.params.id
             const body = req.body
+            if (body.deleteFlag !== undefined) {
+                body.deleteFlag = JSON.parse(body.deleteFlag)
+            }
+
             const data = await this.service.updateOne(id, body)
             this.toJsonResponse(res, 200, data, 'Update successfully')
         } catch (err) {
@@ -45,7 +58,12 @@ export default class BaseController<T> {
         try {
             const id = req.params.id
             await this.service.deleteOne(id)
-            this.toJsonResponse(res, 200, null, 'Permanently delete successfully')
+            this.toJsonResponse(
+                res,
+                200,
+                null,
+                'Permanently delete successfully'
+            )
         } catch (err) {
             next(err)
         }

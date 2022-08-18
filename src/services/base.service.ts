@@ -1,4 +1,5 @@
 import { firestore } from 'firebase-admin'
+import { Request } from 'express'
 // import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import ResponseError from '../utils/responseError'
@@ -29,6 +30,24 @@ export default class BaseService<T> {
         const data = await this.db
             .collection(this.tableName)
             .where('deleteFlag', '==', false)
+            .get()
+        if (data.empty) {
+            throw new ResponseError({
+                statusCode: 404,
+                message: `An item could not be found`
+            })
+        }
+        const allEntries: T[] = []
+        data.forEach((doc: any) => allEntries.push(doc.data()))
+        return allEntries
+    }
+
+    async search(req: Request): Promise<T[]> {
+        const { phoneNumber } = req.query
+        const data = await this.db
+            .collection(this.tableName)
+            .where('deleteFlag', '==', false)
+            .where('phoneNumber', '==', phoneNumber)
             .get()
         if (data.empty) {
             throw new ResponseError({
@@ -117,7 +136,10 @@ export default class BaseService<T> {
     }
 
     protected async generateId(): Promise<string> {
-        const data = await this.db.collection(this.tableName).where('deleteFlag', '==', false).get()
-        return `ID${data.size || 0 + 1}`
+        const data = await this.db
+            .collection(this.tableName)
+            .where('deleteFlag', '==', false)
+            .get()
+        return `ID${data.size + 1}`
     }
 }
