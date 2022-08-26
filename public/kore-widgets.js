@@ -277,8 +277,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       setTimeout(function(){
         if(widgetElement.find('button').length){
           me.refreshElement(paneldataString);
+          me.openPanel('closePanel');
         }
-      },5000)
+      },500)
      }
     KoreWidgetSDK.prototype.maintainCache = function () {
       var _self = this;
