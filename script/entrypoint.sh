@@ -1,5 +1,10 @@
+
 #!/bin/sh
-cp public/kore-config.js public/kore-config.tmpl.js
-envsubst '$API_URL' < public/kore-config.tmpl.js > public/kore-config.js
-cp public/kore-widgets-config.js public/kore-widgets-config.tmpl.js
-envsubst '$API_URL' < public/kore-widgets-config.tmpl.js > kore-widgets-config.js
+for file in public/kore*-config.js;
+do
+  if [ ! -f $file.tmpl.js ]; then
+    cp $file $file.tmpl.js
+  fi
+  envsubst '$API_URL' < $file.tmpl.js > $file
+done
+echo "Replace ENV Successfully!"
