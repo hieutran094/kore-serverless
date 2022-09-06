@@ -19,10 +19,9 @@ jobs:
                   node-version: 16
 
             - name: 'Azure CLI login'
-              uses: azure/login@v1
+              uses: azure/actions/login@v1
               with:
                   creds: ${{secrets.AZURE_CREDENTIALS}}
-                  enable-AzPSSession: true
 
             - uses: actions/cache@v2
               id: yarn-cache
