@@ -1,7 +1,11 @@
-name: Manual deploy API to AWS Lambda
+name: Auto deploy API
 
-on: workflow_dispatch
-
+on:
+    push:
+        paths-ignore:
+            - 'src/views/**'
+        branches:
+            - master
 jobs:
     build-deploy:
         runs-on: ubuntu-latest
@@ -13,6 +17,12 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: 16
+
+            - name: 'Azure CLI login'
+              uses: azure/login@v1
+              with:
+                  creds: ${{secrets.AZURE_CREDENTIALS}}
+                  enable-AzPSSession: true
 
             - name: Install Serverless Framework
               run: yarn global add serverless
@@ -31,6 +41,6 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Deploy
-              run: yarn deploy:prod
+              run: yarn deploy:dev
               env:
                   PORT: 8080

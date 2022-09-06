@@ -1,14 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "ES2015",
-    "module": "commonjs",
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-  },
-  "include": ["src/**/*.ts", "src/**/*.js"],
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "commonjs",
+        "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "typeRoots": ["./types", "node_modules/@types"],
+        "paths": {
+            "azure-aws-serverless-express": [
+                "./types/azure-aws-serverless-express"
+            ]
+        }
+    },
+    "include": ["src/*.ts", "src/*.js"],
+    "exclude": ["node_modules", "tests", "src/**/*.spec.ts"]
 }

@@ -1,4 +1,4 @@
-name: Auto deploy static files to S3
+name: Auto deploy static files
 
 on:
     push:
