@@ -10,8 +10,8 @@
     botOptions.koreAnonymousFn = koreAnonymousFn
     botOptions.recorderWorkerPath = '../libs/recorderWorker.js'
 
-    botOptions.JWTUrl =
-        'https://u9xwh0l47a.execute-api.ap-northeast-1.amazonaws.com/api/v1/token'
+    /**replace when ci/cd deploy */
+    botOptions.JWTUrl = '$API_URL/api/v1/token'
     botOptions.userIdentity = uuidv4() // Provide users email id here
     botOptions.botInfo = {
         name: 'Travel Assistant',
@@ -44,12 +44,12 @@
     //     hostname: 'HOSTNAME_TO_BE_REWRITTEN',
     //     port: 'PORT_TO_BE_REWRITTEN'
     // };
-    
+
     /** algolia search */
     var algoliaConfig = {
         applicationID: 'ZSH2P5ZPSS',
-        searchAPIKey:'5b7324fd0a876e4bbba6e0885f70dea5',
-        index : 'kore.lambda'
+        searchAPIKey: '5b7324fd0a876e4bbba6e0885f70dea5',
+        index: 'kore.lambda'
     }
 
     var chatConfig = {

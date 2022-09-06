@@ -32,5 +32,3 @@ jobs:
 
             - name: Deploy
               run: yarn deploy:dev
-              env:
-                  PORT: 8080
