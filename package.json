@@ -6,6 +6,7 @@
   "scripts": {
     "develop": "node -r @swc-node/register ./src/local.ts",
     "dev": "nodemon -L",
+    "azure": "sls deploy list",
     "dev:sls": "cross-env NODE_ENV=development sls offline start --stage offline",
     "deploy:dev": "sls deploy --stage dev",
     "test": "jest",
