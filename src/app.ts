@@ -13,7 +13,7 @@ app.use(cors())
 //app.use(errorHandler)
 
 app.get('/api/health', (req, res) => {
-    res.json({ message: 'Ok' })
+    res.json({ message: 'Server is running.' })
 })
 app.get('*', (req, res) => {
     res.status(404).json({ message: 'Not Found' })
