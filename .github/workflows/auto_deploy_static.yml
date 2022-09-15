@@ -13,18 +13,24 @@ jobs:
             - name: Check out Git repository
               uses: actions/checkout@v2
 
-            - uses: aws-actions/configure-aws-credentials@v1
+            - name: 'Azure CLI login'
+              uses: azure/actions/login@v1
               with:
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  aws-region: ap-southeast-1
+                  creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
 
             - name: Run script file
               env:
                   API_URL: ${{ secrets.API_URL }}
               run: |
-                  chmod +x ./scripts/entrypoint.sh
-                  ./scripts/entrypoint.sh
+                  chmod +x ./scripts/*.sh
+                  bash ./scripts/entrypoint.sh
               shell: bash
 
-            - run: aws s3 sync ./src/views s3://${{ secrets.AWS_S3_BUCKET_NAME }}
+            - name: Deploy static files
+              env:
+                  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                  AZURE_RESOURCE_PREFIX: ${{ secrets.AZURE_RESOURCE_PREFIX }}
+                  STAGE: dev
+              run: |
+                  bash ./scripts/deployStatic.sh
+              shell: bash
