@@ -18,23 +18,15 @@ jobs:
               env:
                   API_URL: ${{ secrets.API_URL }}
               run: |
-                  chmod +x ./scripts/entrypoint.sh
-                  ./scripts/entrypoint.sh
+                  chmod +x ./scripts/*.sh
+                  bash ./scripts/entrypoint.sh
               shell: bash
 
             - name: Deploy static files
               env:
                   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-                  RESOURCE_GROUP_NAME: sls-jape-dev-kore-api-rg
-                  STORAGE_ACCOUNT_NAME: slsjapedevstatic
+                  AZURE_RESOURCE_PREFIX: ${{ secrets.AZURE_RESOURCE_PREFIX }}
+                  STAGE: dev
               run: |
-                  chmod +x ./scripts/deployStatic.sh
-                  ./scripts/deployStatic.sh
+                  bash ./scripts/deployStatic.sh
               shell: bash
-
-            #- run: |
-            #      az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            #      az configure -d group=sls-jape-dev-kore-api-rg
-            #      az storage account create --name slsjapedevstatic
-            #      az storage blob service-properties update --account-name slsjapedevstatic --static-website --404-document 404.html --index-document index.html
-            #      az storage blob upload-batch --account-name slsjapedevstatic --overwrite true -s ./public -d '$web'

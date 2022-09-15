@@ -1,22 +1,22 @@
-service: kore-api
+service: kore-serverless
 useDotenv: true
 
 plugins:
     - serverless-webpack
     - serverless-azure-functions
-	
 custom:
-  resourcePrefix: 'kore-serverless'
+    resourcePrefix: ${env:AZURE_RESOURCE_PREFIX}
 provider:
     name: azure
     location: Japan East
+    #os: linux
     runtime: nodejs14
     stage: ${opt:stage, 'offline'}
     resourceGroup: ${self:custom.resourcePrefix}-${self:provider.stage}-rg
     appInsights:
-        name: ${self:custom.resourcePrefix}-${self:provider.stage}-appinsights
+        name: ${self:custom.resourcePrefix}-${self:provider.stage}-ai
     functionApp:
-        name: ${self:custom.resourcePrefix}-${self:provider.stage}-funtionapp
+        name: ${self:custom.resourcePrefix}-${self:provider.stage}-fa
     storageAccount:
         name: ${self:custom.resourcePrefix}-${self:provider.stage}-sa # Should be shorter than 24 characters
 
@@ -25,6 +25,9 @@ package:
     exclude:
         - package.json
         - node_modules/**
+        - tests/**
+        - public/**
+        - scripts/**
         - .gitignore
         - .git/**
 
