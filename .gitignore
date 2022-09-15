@@ -5,6 +5,7 @@ build
 .aws-sam
 .serverless
 .webpack
+app
 
 
 # local env files
