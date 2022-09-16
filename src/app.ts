@@ -5,14 +5,11 @@ import cors from 'cors'
 import routers from './routers/v1/index'
 import errorHandler from './middlewares/errorHandler'
 
-//async function main(): Express {
-const expressApp: Express = express()
-expressApp.use(bodyParser.urlencoded({ extended: false }))
-expressApp.use(bodyParser.json())
-expressApp.use(cors())
-expressApp.use(routers)
-expressApp.use(errorHandler)
-//return expressApp
-//}
+const app: Express = express()
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(cors())
+app.use(routers)
+app.use(errorHandler)
 
-export const app = expressApp
+export { app }

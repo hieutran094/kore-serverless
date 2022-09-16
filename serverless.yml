@@ -5,6 +5,9 @@ plugins:
     - serverless-webpack
     - serverless-azure-functions
 custom:
+    webpack:
+        webpackConfig: ./webpack.config.js
+        includeModules: true
     resourcePrefix: ${env:AZURE_RESOURCE_PREFIX}
 provider:
     name: azure
@@ -46,4 +49,4 @@ functions:
             - http: true
               x-azure-settings:
                   direction: out
-                  name: res
+                  name: $return

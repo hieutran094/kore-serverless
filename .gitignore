@@ -7,6 +7,7 @@ build
 .webpack
 app
 scripts/test.sh
+local.settings.json
 
 
 # local env files
