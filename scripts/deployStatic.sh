@@ -22,3 +22,23 @@ az configure -d group="${AZURE_RESOURCE_PREFIX}-${STAGE}-rg"
 az storage account create --name "$STORE_ACCOUNT_NAME"
 az storage blob service-properties update --account-name "$STORE_ACCOUNT_NAME" --static-website --404-document 404.html --index-document index.html
 az storage blob upload-batch --account-name "$STORE_ACCOUNT_NAME" --overwrite true -s ./public -d '$web'
+
+#get and show static endpoint url
+STATIC_ENDPOINT_URL=$(az storage account show -n ${STORE_ACCOUNT_NAME} --query "primaryEndpoints.web" --output tsv)
+echo "Static endpoint: $STATIC_ENDPOINT_URL"
+
+#create CDN and purge cache
+CDN_PROFILE_NAME="${AZURE_RESOURCE_PREFIX}-${STAGE}-cdn"
+CDN_ENDPOINT_NAME="${AZURE_RESOURCE_PREFIX}-${STAGE}-cdn-endpoint"
+CDN_ORIGIN_HOST=$(sed 's/https:\/\///g;s/\///g' <<<"$STATIC_ENDPOINT_URL")
+
+az cdn profile create -n "$CDN_PROFILE_NAME" --sku Standard_Microsoft
+az cdn endpoint create --name "$CDN_ENDPOINT_NAME" --profile-name "$CDN_PROFILE_NAME" --origin "$CDN_ORIGIN_HOST" --origin-host-header "$CDN_ORIGIN_HOST"
+#purge everything
+az cdn endpoint purge --name "$CDN_ENDPOINT_NAME" --profile-name "$CDN_PROFILE_NAME" --no-wait --content-paths "/*"
+#show CDN endpoint url
+CDN_ENDPOINT_URL=$(az cdn endpoint show --profile-name ${CDN_PROFILE_NAME} --name ${CDN_ENDPOINT_NAME} --query "hostName" --output tsv)
+echo "CDN endpoint: $CDN_ENDPOINT_URL"
+
+# Azure logout
+az logout
