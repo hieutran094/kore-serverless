@@ -1,7 +1,13 @@
 import azureFunctionHandler from 'azure-aws-serverless-express'
+import initDatabase from './database/index'
 import { app } from './app'
 
-export const handler = azureFunctionHandler(app)
+export const handler = async () => {
+    const dbUrl = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?ssl=true&replicaSet=globaldb&retrywrites=false`
+    await initDatabase(dbUrl)
+    console.info('Connected to DB')
+    return azureFunctionHandler(app)
+}
 
 /*
 import serverlessHttp from 'serverless-http'

@@ -1,9 +1,9 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { Model } from 'mongoose'
 import BaseService from './base.service'
-import { BookingDetailModel } from '../models/index'
+import { IBookingDetail } from '../models/bookingDetail.model'
 
-export default class BookingDetailService extends BaseService<BookingDetailModel> {
-    constructor(protected db: DocumentClient) {
-        super(db, 'booking_detail')
+export default class BookingDetailService extends BaseService<IBookingDetail> {
+    constructor(protected BookingDetailModel: Model<IBookingDetail>) {
+        super(BookingDetailModel)
     }
 }

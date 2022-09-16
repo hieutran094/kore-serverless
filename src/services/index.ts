@@ -1,5 +1,5 @@
-import databaseInstance from '../database/index'
+import { BookingDetailModel } from '../models/index'
 import BookingDetailService from './bookingDetail.service'
 
-const bookingDetailService = new BookingDetailService(databaseInstance)
+const bookingDetailService = new BookingDetailService(BookingDetailModel)
 export { bookingDetailService }

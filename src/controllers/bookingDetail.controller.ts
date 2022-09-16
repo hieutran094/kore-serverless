@@ -1,8 +1,8 @@
 import BaseController from './base.controller'
-import { BookingDetailModel } from '../models/index'
+import { IBookingDetail } from '../models/bookingDetail.model'
 import BookingDetailService from '../services/bookingDetail.service'
 
-export default class BookingDetailController extends BaseController<BookingDetailModel> {
+export default class BookingDetailController extends BaseController<IBookingDetail> {
     constructor(protected service: BookingDetailService) {
         super(service)
     }

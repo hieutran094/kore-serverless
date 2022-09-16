@@ -1,5 +1,4 @@
-export default interface BaseModel {
-    id?: string
+export default interface IBase {
     createdAt?: string
     updatedAt?: string
     deleteFlag?: boolean
