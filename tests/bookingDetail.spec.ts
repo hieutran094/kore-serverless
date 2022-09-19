@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { Mongoose } from 'mongoose'
 import { app } from '../src/app'
 import truncate from './utils/truncate'
 import initDatabase from '../src/database/index'
@@ -7,11 +8,12 @@ import BookingDetailModel, {
 } from '../src/models/bookingDetail.model'
 
 describe('/booking', () => {
+    let db: Mongoose | undefined
     let stubData: IBookingDetail[]
 
     beforeAll(async () => {
         const dbUrl = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
-        await initDatabase(dbUrl)
+        db = await initDatabase(dbUrl)
     })
 
     beforeEach(async () => {
@@ -64,5 +66,6 @@ describe('/booking', () => {
     afterAll(async () => {
         /** be sure to use the right DB */
         await truncate(BookingDetailModel)
+        if (db instanceof Mongoose) db.disconnect()
     })
 })

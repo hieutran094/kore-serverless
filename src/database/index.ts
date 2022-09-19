@@ -1,8 +1,8 @@
-import { connect } from 'mongoose'
+import { connect, Mongoose } from 'mongoose'
 
-export default async (db: string) => {
+export default async (db: string): Promise<Mongoose | undefined> => {
     try {
-        await connect(db)
+        return await connect(db)
     } catch (error) {
         console.error('Error connecting to database: ', error)
     }
