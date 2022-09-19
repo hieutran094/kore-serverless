@@ -44,7 +44,7 @@ jobs:
                   mongodb-db: test
 
             - name: Run test
-              run: yarn test
+              run: rm -rf ./node_modules/mongodb/src/* && yarn test
               env:
                   DB_USERNAME: root
                   DB_PASSWORD: root
