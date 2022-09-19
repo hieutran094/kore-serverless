@@ -8,5 +8,6 @@ module.exports = {
         '^.+\\.(t|j)s$': ['@swc/jest']
     },
     coverageDirectory: '../coverage',
-    testEnvironment: 'node'
+    testEnvironment: 'node',
+    testTimeout: 15000
 }
