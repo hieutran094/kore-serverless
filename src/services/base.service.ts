@@ -40,14 +40,19 @@ export default class BaseService<T> {
         return data as T
     }
 
-    async updateOne(id: string, dto: T): Promise<T | any> {
+    async updateOne(id: string, dto: T): Promise<T | null> {
         try {
             const now = moment().utc().toISOString()
-            const data = await this.repo.updateOne(
-                { _id: new mongoose.Types.ObjectId(id) },
+            const data = await this.repo.findOneAndUpdate(
+                { _id: new mongoose.Types.ObjectId(id), deleteFlag: false },
                 {
-                    ...dto,
-                    updatedAt: now
+                    $set: {
+                        ...dto,
+                        updatedAt: now
+                    }
+                },
+                {
+                    returnDocument: 'after'
                 }
             )
             return data

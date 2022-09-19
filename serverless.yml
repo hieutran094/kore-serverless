@@ -45,7 +45,9 @@ functions:
                   methods:
                       - GET
                       - POST
-                      - OPTIONS
+                      - PUT
+                      - DELETE
+                      - PATCH
             - http: true
               x-azure-settings:
                   direction: out

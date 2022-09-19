@@ -1,16 +1,21 @@
 import request from 'supertest'
 import { app } from '../src/app'
 import truncate from './utils/truncate'
-import database from '../src/database/index'
-import { BookingDetailModel } from '../src/models'
+import initDatabase from '../src/database/index'
+import BookingDetailModel, {
+    IBookingDetail
+} from '../src/models/bookingDetail.model'
 
 describe('/booking', () => {
-    let tableName: string = 'booking_detail'
-    let stubData: BookingDetailModel[]
+    let stubData: IBookingDetail[]
+
+    beforeAll(async () => {
+        const dbUrl = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?authSource=admin`
+        await initDatabase(dbUrl)
+    })
 
     beforeEach(async () => {
-        stubData = (await database.scan({ TableName: tableName }).promise())
-            .Items as BookingDetailModel[]
+        stubData = await BookingDetailModel.find({}).exec()
     })
 
     it('[POST] should create booking', async () => {
@@ -30,16 +35,18 @@ describe('/booking', () => {
 
     it('[GET] should get one booking with data', async () => {
         const res = await request(app)
-            .get(`/api/v1/booking/${stubData[0].id}`)
+            .get(`/api/v1/booking/${stubData[0]._id}`)
             .send()
         expect(res.body.success).toBeTruthy()
-        expect(res.body.data).toStrictEqual(stubData[0])
+        expect(res.body.data).toStrictEqual(
+            JSON.parse(JSON.stringify(stubData[0]))
+        )
     })
 
     it('[PUT] should update booking', async () => {
         const data = { name: 'name02' }
         const res = await request(app)
-            .put(`/api/v1/booking/${stubData[0].id}`)
+            .put(`/api/v1/booking/${stubData[0]._id}`)
             .send(data)
         expect(res.body.success).toBeTruthy()
         expect(res.body.data.name).toBe('name02')
@@ -47,17 +54,15 @@ describe('/booking', () => {
 
     it('[DELETE] should delete booking', async () => {
         const res = await request(app)
-            .delete(`/api/v1/booking/${stubData[0].id}`)
+            .delete(`/api/v1/booking/${stubData[0]._id}`)
             .send()
         expect(res.body.success).toBeTruthy()
-        const afterData = (
-            await database.scan({ TableName: tableName }).promise()
-        ).Items as BookingDetailModel[]
+        const afterData = await BookingDetailModel.find({}).exec()
         expect(afterData.length).toBe(0)
     })
-    
+
     afterAll(async () => {
         /** be sure to use the right DB */
-        await truncate(database, tableName)
+        await truncate(BookingDetailModel)
     })
 })

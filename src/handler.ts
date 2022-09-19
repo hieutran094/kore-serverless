@@ -8,7 +8,7 @@ const cachedServerlessExpress = serverlessExpress({ app })
 export const handler: AzureFunction = async (context, req) => {
     const dbUrl = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}?ssl=true&replicaSet=globaldb&retrywrites=false`
     await initDatabase(dbUrl)
-    console.info('⚡️[server]: Connected to DB')
+    context.log('⚡️[server]: Connected to DB')
     return cachedServerlessExpress(context, req)
 }
 
