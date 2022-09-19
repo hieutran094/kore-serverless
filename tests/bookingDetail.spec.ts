@@ -35,7 +35,13 @@ describe('/booking', () => {
         expect(res.body.success).toBeTruthy()
     })
 
-    it('[GET] should get one booking with data', async () => {
+    it('[GET][GetMany] should get many booking with data', async () => {
+        const res = await request(app).get(`/api/v1/booking/`).send()
+        expect(res.body.success).toBeTruthy()
+        expect(res.body.data.length).toBe(stubData.length)
+    })
+
+    it('[GET][GetOne] should get one booking with data', async () => {
         const res = await request(app)
             .get(`/api/v1/booking/${stubData[0]._id}`)
             .send()
@@ -54,7 +60,18 @@ describe('/booking', () => {
         expect(res.body.data.name).toBe('name02')
     })
 
-    it('[DELETE] should delete booking', async () => {
+    it('[DELETE][SoftDelete] should softdelete booking', async () => {
+        const res = await request(app)
+            .delete(`/api/v1/booking/${stubData[0]._id}/soft-delete`)
+            .send()
+        expect(res.body.success).toBeTruthy()
+        const afterData = await BookingDetailModel.find({
+            deleteFlag: false
+        }).exec()
+        expect(afterData.length).toBe(0)
+    })
+
+    it('[DELETE][HardDelete] should delete booking', async () => {
         const res = await request(app)
             .delete(`/api/v1/booking/${stubData[0]._id}`)
             .send()
